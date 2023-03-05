@@ -1,0 +1,104 @@
+## The Usual Commands may important.
+
+# 1. Build the container image:
+
+    command: docker build -t <CHOOSE_IMAGE_NAME_HERE> .
+
+    note: In the terminal, change directory to the app directory where the Dockerfile is there.
+    note: -t flag used to choosing a name for image name should be snacke case.
+    note: Build your image again after every update.
+
+# 2. Start an app container:
+
+    command: docker run -dp <HOST_PORT>:<CONTAINER_PORT> <NAME_OF_IMAGE>
+
+    note: We can use this command every where that can run docker engine commands.
+    note: -d flag used to run container in the background of terminal.
+    note: -p flag used to create a mapping between the host’s port to the container’s port.
+    note: -w <CONTAINER_PATH> flag used to change workdirectory of the container to <CONTAINER_PATH>.
+
+# 3. Get the ID of the running containers:
+
+    command: docker ps
+
+# 4. Stop the running container with ID:
+
+    command: docker stop <CONTAINER_ID>
+
+# 5. Delete the stoped containers:
+
+    command: docker rm <CONTAINER_ID>
+
+    note: -f flag used to force stop and delete any container.
+
+# 6. Logging the container:
+
+    command: docker logs -f <CONTAINER_ID>
+
+# 7. Use bash commands while starting a container:
+
+    command: (Example) docker run -d ubuntu bash -c "shuf -i 1-10000 -n 1 -o /data.txt && tail -f /dev/null"
+    command: docker run -dp <HOST_PORT>:<CONTAINER_PORT> <NAME_OF_IMAGE> sh -c "yarn install && yarn run dev"
+
+    note: With tail -f /dev/null, we force keep the container running when we have nothing on the container.
+    note: sh used when we use alpine or etc (alpine dosen't have bash)
+
+# 8. Use bach commands while container is running:
+
+    command: docker exec -it <CONTAINER_ID> bash
+    command: (Example) docker exec <CONTAINER_ID> cat /data.txt
+    command: (Example) docker exec -it <MYSQL_CONTAINER_ID> mysql -u root -p
+
+
+    note: base command should be between -it and bash.
+
+# 9. Create new volume:
+
+    command: docker volume create <VOLUME_NAME>
+
+# 10. Mounting and Persist volume with containers:
+
+    command: docker run -dp <HOST_PORT>:<CONTAINER_PORT> <NAME_OF_IMAGE> --mount type=volume,src=<VOLUME_NAME>,target=<ADDRESS_OF_FOLDER_TO_SAVE> getting-started
+
+# 11. Mounting a Bind:
+
+    command: docker run -dp <HOST_PORT>:<CONTAINER_PORT> <NAME_OF_IMAGE> --mount type=bind,src=<HOST_SORCE>,target=<CONTAINER_SOURCE>
+
+    note: Can use "$(pwd)" instead of <HOST_SORCE> to use the current folder of host.
+
+# 12. Create new networking between containers:
+
+    command: docker network create <NETWORK_NAME>
+
+# 13. Attach a container to network at startup:
+
+    command: (Example) docker run -d --network <NETWORK_NAME> --network-alias mysql -v <VOLUME_NAME>:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=todos mysql:8.0
+
+    note: -e flag used to pass environment variables.
+    note: -v flag used to set the valume for image.
+    note: --network-alias used to rename container and image name in the network.
+
+# 14. Checking and troubleshooting the network:
+
+    command: docker run -it --network <NETWORK_NAME> nicolaka/netshoot
+    command: (Example) dig mysql
+
+    note: The image nicolaka/netshoot used for troubleshooting.
+    note: dig used to check the IP and Port of any containers.
+
+# 15. Checking the compose version:
+
+    command: docker compose version
+
+# 16. Run the application stack in Compose:
+
+    command: docker compose up -d
+    command: docker compose logs -f
+
+    note: Make sure no other copies of the app/db are running first.
+
+# 17. shutdown the application stack in Compose:
+
+    command: docker compose down
+
+
